@@ -22,9 +22,15 @@ class Container
 public:
 
 	Container(int capacity = 1, int size = 0, T * elements = NULL) {
-
+		this->capacity = capacity;
+		if (size > capacity) this->size = capacity;
+		else this->size = size;
+		if (elements != NULL && capacity != 0) for (int i = 0; i < size; i++) add(elements[i]);
 	}
-	Container(const Container &);
+
+	Container(const Container & c) {
+		*this = c;
+	}
 	~Container();
 
 	int getSize() const {
@@ -39,6 +45,12 @@ public:
 		if (size == capacity) resizeUp();
 		elements[size] = el;
 		++size;
+	}
+
+	const Capacity & operator=(const Capacity & c) {
+		this->capacity = c.getCapacity();
+		this->size = c.getSize();
+		if (c.getSize() > 0) for (int i = 0; i < c.getSize(); i++) add(c[i]);
 	}
 
 	T & operator[](unsigned int idx) {
