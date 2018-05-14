@@ -1,6 +1,5 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#define _CRT_SECURE_NO_WARNINGS
 
 #include <iostream>
 
@@ -12,10 +11,14 @@ class Player
 
 public:
 
-	Player(unsigned int id = 0, const char name[128] = { '\0' });
+	Player(unsigned int id = 0, const char * name = NULL);
 	~Player();
 
-	friend std::ostream & operator<<(std::ostream & o, const Player & p);
+	unsigned int getID() const;
+	const char * getName() const;
+
+	void setID(unsigned int id);
+	void setName(const char * name);
 
 };
 

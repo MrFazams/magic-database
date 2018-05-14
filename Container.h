@@ -27,12 +27,10 @@ class Container
 
 public:
 
-	Container(unsigned int capacity = 1, unsigned int size = 0, T * elements = NULL) {
-		this->capacity = capacity;
-		if (size > capacity) this->size = capacity;
-		else this->size = size;
-		if (elements != NULL && capacity > 0) for (unsigned int i = 0; i < size; i++) add(elements[i]);
-		else this->elements = NULL;
+	Container(unsigned int capacity = 0, unsigned int size = 0, T * elements = NULL) {
+		this->capacity = 0;
+		this->size = 0;
+		this->elements =NULL;
 	}
 
 	Container(const Container & c) {
@@ -52,15 +50,18 @@ public:
 	}
 
 	void add(T& el) {
-		if (size == capacity) resizeUp();
+		if (size == capacity || capacity == 0) resizeUp();
 		elements[size] = el;
 		++size;
 	}
 
-	const Capacity & operator=(const Capacity & c) {
+	const Container & operator=(const Container & c) {
 		this->capacity = c.getCapacity();
 		this->size = c.getSize();
-		if (c.getSize() > 0) for (unsigned int i = 0; i < c.getSize(); i++) add(c[i]);
+		if (this->capacity > 0) {
+			this->elements = new T[capacity];
+			for (unsigned int i = 0; i < c.getSize(); i++) add(c[i]);
+		}
 		else this->elements = NULL;
 	}
 
