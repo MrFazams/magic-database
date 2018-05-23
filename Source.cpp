@@ -6,18 +6,21 @@
 #include "Container.h"
 #include "Player.h"
 #include "Card.h"
+#include "Deck.h"
 
 using namespace std;
 
 bool stop = false;
 Container<Player> players;
 Container<Card> cards;
+Container<Deck> decks;
 
 void input();									// Takes user input
 void loadData();								// Loads files
 void saveData();								// Saves files with changes
 void createPlayer(const char * name);			// Generates new player with given name
 void createCard(const char * input);			// Generates new card
+void createDeck(const char * input);			// Generate new deck
 void report();									// 
 
 int main()
@@ -115,6 +118,20 @@ void loadData()
 	}
 	in.close();
 
+	//	Load deck data
+
+	in.open("decks.dat", ios::binary);
+	if (in.is_open()) {
+		unsigned int size;
+		in.read((char *)&size, sizeof(unsigned int));
+		for (unsigned int i = 0; i < size; i++) {
+			Deck d;
+			in.read((char *)&d, sizeof(Deck));
+			decks.add(d);
+		}
+	}
+	in.close();
+
 }
 
 void saveData()
@@ -141,6 +158,16 @@ void saveData()
 	}
 	out.close();
 
+	//	Save deck data
+
+	out.open("decks.dat", ios::binary | ios::trunc);
+	size = decks.getSize();
+	out.write((char *)&size, sizeof(unsigned int));
+	for (unsigned int i = 0; i < size; i++) {
+		out.write((char *)&decks[i], sizeof(Deck));
+	}
+	out.close();
+
 }
 
 void createPlayer(const char * name)
@@ -153,7 +180,7 @@ void createPlayer(const char * name)
 void createCard(const char * input)
 {
 
-	// Split input
+	//	Split input
 
 	char temp1[64], temp2[64];
 	int i = 0;
@@ -171,7 +198,7 @@ void createCard(const char * input)
 	}
 	temp2[j] = '\0';
 
-	// Specify color
+	//	Specify color
 
 	clr color;
 	if (strstr(temp1, "White") != NULL || strstr(temp1, "white") != NULL) {
@@ -194,7 +221,7 @@ void createCard(const char * input)
 		return;
 	}
 
-	// Create card and add to list
+	//	Create card and add to list
 
 	Card c(cards.getSize(), color, temp2);
 	cards.add(c);
@@ -202,7 +229,13 @@ void createCard(const char * input)
 	
 }
 
-void report() {
+void createDeck(const char * input)
+{
+
+}
+
+void report() 
+{
 	for (unsigned int i = 0; i < cards.getSize(); i++) {
 		cout << "Card name: " << cards[i].getName() << " ID: " << cards[i].getID() << " Color: ";
 		switch (cards[i].getColor()) {
