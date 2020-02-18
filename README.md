@@ -42,4 +42,3 @@ Green
     Owner: Swamp Reacher Card: Forest Color: Green
 
 Most common card: Island Color: Blue
-
